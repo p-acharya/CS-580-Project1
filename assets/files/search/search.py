@@ -83,14 +83,20 @@ class SearchNode:
         self.action = action
         self.step_cost = step_cost
 
+    @property
+    def path_cost(self):
+        if self.parent:
+            return self.parent.path_cost + self.step_cost
+        else:
+            return self.step_cost
+
     def __repr__(self):
         return f"SearchNode(position={self.position}, action={self.action}, " \
                f"step_cost={self.step_cost}, parent={repr(self.parent)})"
 
 
-def generic_search(problem, fringe_strategy):
+def generic_search(problem, fringe):
     start_node = SearchNode(position=problem.getStartState())
-    fringe = fringe_strategy()
     fringe.push(start_node)
     visited = set()
 
@@ -118,6 +124,16 @@ def generic_search(problem, fringe_strategy):
     return []
 
 
+def reconstruct_path(goal_node):
+    path = []
+    while goal_node.action is not None:  # Assuming the start node has None
+        # as its action
+        path.append(goal_node.action)
+        goal_node = goal_node.parent
+    path.reverse()
+    return path
+
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -133,59 +149,25 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(
     problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
-    # stack = util.Stack()
-    # start_position = problem.getStartState()
-    # start_node = SearchNode(position=start_position)
-    #
-    # stack.push(start_node)
-    # visited = set()
-    #
-    # while not stack.isEmpty():
-    #     current_node = stack.pop()
-    #
-    #     if problem.isGoalState(current_node.position):
-    #         return reconstruct_path(current_node)
-    #
-    #     if current_node.position not in visited:
-    #         visited.add(current_node.position)
-    #
-    #         for successor, action, step_cost in problem.getSuccessors(
-    #                 current_node.position
-    #         ):
-    #             if successor not in visited:
-    #                 successor_node = SearchNode(
-    #                     position=successor,
-    #                     parent=current_node,
-    #                     action=action,
-    #                     step_cost=step_cost
-    #                 )
-    #                 stack.push(successor_node)
-    #
-    # return []
-    return generic_search(problem, util.Stack)
-
-
-def reconstruct_path(goal_node):
-    path = []
-    while goal_node.action is not None:  # Assuming the start node has None
-        # as its action
-        path.append(goal_node.action)
-        goal_node = goal_node.parent
-    path.reverse()
-    return path
+    stack = util.Stack()
+    return generic_search(problem, stack)
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.Queue()
+    return generic_search(problem, queue)
 
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    def path_cost(search_node: SearchNode):
+        return search_node.path_cost
+
+    path_cost_priority_queue = util.PriorityQueueWithFunction(path_cost)
+
+    return generic_search(problem, path_cost_priority_queue)
 
 
 def nullHeuristic(state, problem=None):
