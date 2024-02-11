@@ -77,22 +77,15 @@ def tinyMazeSearch(problem):
 
 
 class SearchNode:
-    def __init__(self, position, parent=None, action=None, step_cost=0):
+    def __init__(self, position, parent=None, action=None, path_cost=0):
         self.position = position
         self.parent = parent
         self.action = action
-        self.step_cost = step_cost
-
-    @property
-    def path_cost(self):
-        if self.parent:
-            return self.parent.path_cost + self.step_cost
-        else:
-            return self.step_cost
+        self.path_cost = path_cost
 
     def __repr__(self):
         return f"SearchNode(position={self.position}, action={self.action}, " \
-               f"step_cost={self.step_cost}, parent={repr(self.parent)})"
+               f"path_cost={self.path_cost}, parent={repr(self.parent)})"
 
 
 def generic_search(problem, fringe):
@@ -117,7 +110,7 @@ def generic_search(problem, fringe):
                         position=successor,
                         parent=current_node,
                         action=action,
-                        step_cost=current_node.step_cost + step_cost
+                        path_cost=current_node.path_cost + step_cost
                     )
                     fringe.push(successor_node)
 
@@ -183,7 +176,18 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic
     first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    def a_star_priority_function(node: SearchNode):
+        """A* optimizes for f(n) = g(n) + h(n)"""
+        g_n = node.path_cost
+        h_n = heuristic(node.position, problem)
+        return g_n + h_n
+
+    a_star_priority_queue = util.PriorityQueueWithFunction(
+        a_star_priority_function
+    )
+
+    return generic_search(problem, a_star_priority_queue)
 
 
 # Abbreviations
