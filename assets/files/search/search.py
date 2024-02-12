@@ -83,9 +83,10 @@ class SearchNode:
         self.action = action
         self.path_cost = path_cost
 
-    def __repr__(self):
-        return f"SearchNode(position={self.position}, action={self.action}, " \
-               f"path_cost={self.path_cost}, parent={repr(self.parent)})"
+    # def __repr__(self):
+    #     return f"SearchNode(position={self.position}, action={
+    #     self.action}, " \
+    #            f"path_cost={self.path_cost}, parent={repr(self.parent)})"
 
 
 def generic_search(problem, fringe):
