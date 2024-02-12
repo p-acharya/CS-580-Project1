@@ -83,11 +83,6 @@ class SearchNode:
         self.action = action
         self.path_cost = path_cost
 
-    # def __repr__(self):
-    #     return f"SearchNode(position={self.position}, action={
-    #     self.action}, " \
-    #            f"path_cost={self.path_cost}, parent={repr(self.parent)})"
-
 
 def generic_search(problem, fringe):
     start_node = SearchNode(position=problem.getStartState())
@@ -143,18 +138,21 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(
     problem.getStartState()))
     """
+    "*** YOUR CODE HERE ***"
     stack = util.Stack()
     return generic_search(problem, stack)
 
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
+    "*** YOUR CODE HERE ***"
     queue = util.Queue()
     return generic_search(problem, queue)
 
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
+    "*** YOUR CODE HERE ***"
 
     def path_cost(search_node: SearchNode):
         return search_node.path_cost

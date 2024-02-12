@@ -325,16 +325,11 @@ def euclideanHeuristic(position, problem, info={}):
 # This portion is incomplete.  Time to write code!  #
 #####################################################
 
-
 class CornersProblem(search.SearchProblem):
     """
     This search problem finds paths through all four corners of a layout.
 
     You must select a suitable state space and successor function
-
-    Our heuristic could be the distance from an unvisited corner. If a
-    corner has already been visited, then we can set it to negative or some
-    dummy value to make the distance extremely large?
     """
 
     def __init__(self, startingGameState):
@@ -358,12 +353,14 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
+        "*** YOUR CODE HERE ***"
         return self.startingPosition, (False, False, False, False)
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        "*** YOUR CODE HERE ***"
         return all(state[1])
 
     def getSuccessors(self, state):
@@ -393,6 +390,8 @@ class CornersProblem(search.SearchProblem):
                 successors.append(
                     (((nextx, nexty), tuple(nextVisitedCorners)), action, 1)
                 )
+
+        self._expanded += 1  # DO NOT CHANGE
         return successors
 
     def getCostOfActions(self, actions):
@@ -411,7 +410,7 @@ class CornersProblem(search.SearchProblem):
         return len(actions)
 
 
-def cornersHeuristic(state, problem: CornersProblem):
+def cornersHeuristic(state, problem):
     """
     A heuristic for the CornersProblem that you defined.
 
@@ -556,6 +555,7 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
+    "*** YOUR CODE HERE ***"
     foodList = foodGrid.asList()
     if not foodList:
         return 0
@@ -597,6 +597,7 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
+        "*** YOUR CODE HERE ***"
         return search.bfs(problem)
 
 
@@ -636,6 +637,8 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x, y = state
+
+        "*** YOUR CODE HERE ***"
         return self.food[x][y]
 
 
